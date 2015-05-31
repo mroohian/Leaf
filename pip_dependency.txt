@@ -1,0 +1,4 @@
+selenium>=2.44.0
+splinter>=0.7.0
+python-Levenshtein
+-e git://github.com/beanqueen/salad.git#egg=salad
