@@ -14,7 +14,7 @@ class PageObject:
         pass
 
     @abstractmethod
-    def get_url(self):
+    def get_url(self, **args):
         raise NotImplemented(' get_url is undefined in page %s' % self.__class__.__name__)
 
     @abstractmethod

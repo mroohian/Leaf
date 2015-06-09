@@ -55,16 +55,27 @@ def _check_is_on_page(page, negate):
 
     leaf_world.current_page = page_object
 
-@step(r'(?:visit|access|open) the "([^"]+)" page')
-def visit_page(step, page):
+@step(r'(?:visit|access|open) the "([^"]+)" page(?: with args ([^$]+))?$')
+def visit_page(step, page, args):
+    if args is not None:
+        arg_segments = args.split()
+
+        args = {}
+        for arg in arg_segments:
+            try:
+                [key, value] = arg.split(':')
+                args[key] = value
+            except ValueError, e:
+                raise ValueError('Parameters must have key:value format.\nBase Error: ' + e.message)
+
     page_object = create_page_object(page)
     assert page_object is not None
     leaf_world.current_page = page_object
-    open_page(page_object.get_url())
+    open_page(page_object.get_url(**args))
 
-@step(r'(?:visit|access|open) the homepage')
-def visit_homepage(step):
-    visit_page(step, 'home')
+@step(r'(?:visit|access|open) the homepage(?: with args ([^$]+))?$')
+def visit_homepage(step, args):
+    visit_page(step, 'home', args)
 
 @step(r'should( not)? be on the "([^"]+)" page(?: within (\d+) seconds)?$')
 @step(r'should( not)? see that current page is "([^"]+)"(?: within (\d+) seconds)?')
